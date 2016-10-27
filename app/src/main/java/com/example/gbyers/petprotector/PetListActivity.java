@@ -25,6 +25,7 @@ public class PetListActivity extends AppCompatActivity {
     //store memebr variable to whatevr has been selected default will be (R.drawable.none)
     private Uri imageUri;
     private ImageView selectImage;
+    private static final int CONSTANT = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +68,22 @@ public class PetListActivity extends AppCompatActivity {
         {
             //use an intent to launch gallery and take pics
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(galleryIntent, 100);
+            startActivityForResult(galleryIntent, CONSTANT);
         }else
             Toast.makeText(this, "set Permisions",Toast.LENGTH_LONG);
+
+    }
+    //code to handle when user closes image Gallery
+    //by slecting an image or pressing the back button
+    //intent data is Uri
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(data != null && requestCode == CONSTANT && resultCode == RESULT_OK){
+           //set imageUri to what was clicked
+            imageUri = data.getData();
+            selectImage.setImageURI(imageUri);
+        }
 
     }
     public static Uri getUriToResource(@NonNull Context context, @AnyRes int resId)throws Resources.NotFoundException{
